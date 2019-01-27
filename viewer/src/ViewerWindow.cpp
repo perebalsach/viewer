@@ -1,10 +1,12 @@
 #include "ViewerWindow.h"
+#include <sstream>
 
-ViewerWindow::ViewerWindow(const char* title, int width, int height)
+ViewerWindow::ViewerWindow(const char* title, int width, int height, bool fullscreen)
 {
 	m_Title = title;
 	m_Width = width;
 	m_Height = height;
+	m_fullscreen = fullscreen;
 }
 
 bool ViewerWindow::Init()
@@ -15,14 +17,26 @@ bool ViewerWindow::Init()
 		return false;
 	}
 
+	if (m_fullscreen)
+	{
+		GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+		const GLFWvidmode* vidMode = glfwGetVideoMode(monitor);
+		if (vidMode != NULL)
+		{
+			m_window = glfwCreateWindow(vidMode->width, vidMode->height, m_Title, monitor, NULL );
+		}
+	}
+	else
+	{
+		this->m_window = glfwCreateWindow(m_Width, m_Height, m_Title, NULL, NULL);
+	}
+
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 	
-	this->m_window = glfwCreateWindow(m_Width, m_Height, m_Title, NULL, NULL);
-
-
+	
 	if (m_window == NULL)
 	{
 		std::cout << "Error Creating GLFW Window" << std::endl;
@@ -40,6 +54,7 @@ bool ViewerWindow::Init()
 		glfwTerminate();
 		return false;
 	}
+	shoowFPS();
 
 	return 1;
 }
@@ -60,4 +75,33 @@ void ViewerWindow::glfwOnKey(GLFWwindow* window, int key, int scancode, int acti
 	{
 		glfwSetWindowShouldClose(window, GL_TRUE);
 	}
+}
+
+void ViewerWindow::shoowFPS()
+{
+	static double previousSeconds = 0.0;
+	static int frameCount = 0;
+	double elapsedSeconds;
+	double currentSeconds = glfwGetTime();
+
+	elapsedSeconds = currentSeconds - previousSeconds;
+
+	if (elapsedSeconds > 0.25)
+	{
+		previousSeconds = currentSeconds;
+		double fps = (double)frameCount / elapsedSeconds;
+		double msPerSecond = 1000.0 / fps;
+		
+		std::ostringstream outs;
+		outs.precision(3);
+		outs << std::fixed
+			<< m_Title << "   "
+			<< "FPS: " << fps << "   "
+			<< "Frame time: " << msPerSecond << " (ms)";
+		glfwSetWindowTitle(m_window, outs.str().c_str());
+		
+		frameCount = 0;
+	}
+
+	frameCount++;
 }

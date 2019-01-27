@@ -8,7 +8,7 @@
 
 int main()
 {
-	ViewerWindow viewWidnow("Viewer", 800, 600);
+	ViewerWindow viewWidnow("Viewer", 800, 600, true);
 
 	if (!viewWidnow.Init())
 	{
@@ -25,6 +25,8 @@ int main()
 		
 		glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
+		
+		viewWidnow.shoowFPS();
 
 		glfwSwapBuffers(viewWidnow.getWindow());
 	}
