@@ -9,12 +9,16 @@ class ViewerWindow
 {
 public:
 	ViewerWindow(const char* title, int width, int height);
+	
 	bool Init();
-
-	GLFWwindow* window;
+	GLFWwindow* getWindow();
+	void close();
+	static void glfwOnKey(GLFWwindow* window, int key, int scancode, int action, int mode);
 
 private:
 	const char* m_Title;
 	int m_Width;
 	int m_Height;
+
+	GLFWwindow* m_window;
 };

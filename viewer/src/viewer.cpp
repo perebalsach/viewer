@@ -16,17 +16,17 @@ int main()
 		return -1;
 	}
 
-	//glfwSetKeyCallback(viewWidnow.window, viewWidnow.glfw_onKey);
+	glfwSetKeyCallback(viewWidnow.getWindow(), viewWidnow.glfwOnKey);
 
 	// Main loop
-	while (!glfwWindowShouldClose(viewWidnow.window))
+	while (!glfwWindowShouldClose(viewWidnow.getWindow()))
 	{
 		glfwPollEvents();
 		
 		glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		glfwSwapBuffers(viewWidnow.window);
+		glfwSwapBuffers(viewWidnow.getWindow());
 	}
 
 	glfwTerminate();
