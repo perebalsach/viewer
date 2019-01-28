@@ -23,7 +23,7 @@ bool ViewerWindow::Init()
 		const GLFWvidmode* vidMode = glfwGetVideoMode(monitor);
 		if (vidMode != NULL)
 		{
-			m_window = glfwCreateWindow(vidMode->width, vidMode->height, m_Title, monitor, NULL );
+			this->m_window = glfwCreateWindow(vidMode->width, vidMode->height, m_Title, monitor, NULL );
 		}
 	}
 	else

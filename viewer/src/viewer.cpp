@@ -4,11 +4,12 @@
 #include "GL/glew.h"
 #include "GLFW/glfw3.h"
 #include "ViewerWindow.h"
+#include "Font.h"
 
 
 int main()
 {
-	ViewerWindow viewWidnow("Viewer", 800, 600, true);
+	ViewerWindow viewWidnow("Viewer", 800, 600);
 
 	if (!viewWidnow.Init())
 	{
