@@ -9,7 +9,13 @@
 
 int main()
 {
-	ViewerWindow viewWidnow("Viewer", 800, 600);
+	ViewerWindow viewWidnow("Viewer", 800, 600, false);
+	Font font;
+
+	if (!font.Load("content/fonts/pacifico.ttf"))
+	{
+		return 0;
+	}
 
 	if (!viewWidnow.Init())
 	{

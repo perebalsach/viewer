@@ -1,17 +1,33 @@
 #include <iostream>
 #include "Font.h"
+#include <fstream>
 
 Font::Font()
 {
-	FT_Library  library;   /* handle to library     */
-	FT_Face     face;      /* handle to face object */
-	FT_Error    error;
-	const char* filename = "content/fonts/pacifico.ttf";
-
-	if (FT_Init_FreeType(&library))
+	if (FT_Init_FreeType(&m_library))
 	{
-		throw std::runtime_error("FT_Init_FreeType failed");
+		std::cout << "FT_Init_FreeType failed" << std::endl;
 	}
-	FT_New_Face(library, "content/fonts/pacifico.ttf", 0, &face);
-	// error = FT_New_Face(library, filename, 0, &face);
+}
+
+bool Font::Load(const char* path)
+{
+	if (FT_New_Face(m_library, path, 0, &m_face))
+	{
+		std::cout << "ERROR::FREETYPE: Failed loading the font file" << std::endl;
+		return false;
+	}
+
+	FT_Set_Pixel_Sizes(m_face, 0, 48);
+
+	if (FT_Load_Char(m_face, 'X', FT_LOAD_RENDER))
+	{
+		std::cout << "ERROR::FREETYPE: Failed to load the glyph" << std::endl;
+		return false;
+	}
+
+	std::cout << "Font loaded succesfully" << std::endl;
+	
+	
+	return true;
 }
