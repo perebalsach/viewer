@@ -1,6 +1,6 @@
 #include <iostream>
 #include "Font.h"
-#include <fstream>
+
 
 Font::Font()
 {
@@ -29,5 +29,7 @@ bool Font::Load(const char* path)
 	std::cout << "Font loaded succesfully" << std::endl;
 	
 	
+	std::map<GLchar, Character> characters;
+
 	return true;
 }
