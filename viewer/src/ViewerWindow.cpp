@@ -11,6 +11,7 @@ ViewerWindow::ViewerWindow(const char* title, int width, int height, bool fullsc
 
 bool ViewerWindow::Init()
 {
+	// Inits GLFW
 	if (!glfwInit())
 	{
 		std::cout << "Error initializing GLFW" << std::endl;

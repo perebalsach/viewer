@@ -3,8 +3,11 @@
 #define GLEW_STATIC
 #include "GL/glew.h"
 #include "GLFW/glfw3.h"
+
 #include "ViewerWindow.h"
-// #include "Font.h"
+#include "Mesh.h"
+
+#include "Font.h"
 
 
 const GLchar* vertexShaderSrc =
@@ -27,86 +30,34 @@ const GLchar* fragmentShaderSrc =
 int main()
 {
 	ViewerWindow viewWidnow("Viewer", 800, 600, false);
-	//Font font;
-
-	// ------------ MESH GENERATION
-	GLfloat vertices[] =
-	{
-		0.0f,	 0.5f,	0.0f,
-		0.5f,	-0.5f,	0.0f,
-	   -0.5f,	-0.5f,	0.0f
-	};
-
-	GLuint vbo, vao;
-
-	/*if (!font.Load("content/fonts/pacifico.ttf"))
+	Font font;
+	Mesh mesh;
+	
+	// ------------- Fonts ------------------------------
+	if (!font.Load("content/fonts/pacifico.ttf"))
 	{
 		return 0;
-	}*/
+	}
 
+	// ------------- Window initialitzation -------------
 	if (!viewWidnow.Init())
 	{
 		std::cout << "Error creating the window. See details below" << std::endl;
 		return -1;
 	}
-
+	
+	// ------------- Window events initialitzation -------------
 	glfwSetKeyCallback(viewWidnow.getWindow(), viewWidnow.glfwOnKey);
 
-	// ---------------------------------------------------------------------------------------------------
-	glGenBuffers(1, &vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
-
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
-	glEnableVertexAttribArray(0);
-
-	// ----------- SHADER
-	GLuint vs = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vs, 1, &vertexShaderSrc, NULL);
-	glCompileShader(vs);
-
-	// Error checking shaders
-	GLint result;
-	GLchar infoLog[512];
-
-	glGetShaderiv(vs, GL_COMPILE_STATUS, &result);
-	if (!result)
+	// ------------- Mesh loading -------------------------------
+	if (!mesh.load())
 	{
-		glGetShaderInfoLog(vs, sizeof(infoLog), NULL, infoLog);
-		std::cout << "ERROR::VERTEX SHADER: Can not be compiled! " << infoLog << std::endl;
+		std::cout << "Error loading the mesh" << std::endl;
+		return -1;
 	}
 
-	GLuint fs = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fs, 1, &fragmentShaderSrc, NULL);
-	glCompileShader(fs);
-
-	glGetShaderiv(fs, GL_COMPILE_STATUS, &result);
-	if (!result)
-	{
-		glGetShaderInfoLog(fs, sizeof(infoLog), NULL, infoLog);
-		std::cout << "ERROR::FRAGMENT SHADER: Can not be compiled! " << infoLog << std::endl;
-	}
-
-	GLuint shaderProgram = glCreateProgram();
-	glAttachShader(shaderProgram, vs);
-	glAttachShader(shaderProgram, fs);
-	glLinkProgram(shaderProgram);
-
-	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &result);
-	if (!result)
-	{
-		glGetProgramInfoLog(shaderProgram, sizeof(infoLog), NULL, infoLog);
-		std::cout << "ERROR::SHADER LINKER: Can not be linked! " << infoLog << std::endl;
-	}
-
-	glDeleteShader(vs);
-	glDeleteShader(fs);
-	// ---------------------------------------------------------------------------------------------------
-
-
+	// ------------- Shder loading ------------------------------
+	mesh.loadShaders(vertexShaderSrc, fragmentShaderSrc);
 
 	// Main loop
 	while (!glfwWindowShouldClose(viewWidnow.getWindow()))
@@ -115,22 +66,13 @@ int main()
 		
 		glClear(GL_COLOR_BUFFER_BIT);
 		
-		// -------------------------------------------
-		glUseProgram(shaderProgram);
-
-		glBindVertexArray(vao);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
-		glBindVertexArray(0);
-		// -------------------------------------------
+		mesh.draw();
 
 		viewWidnow.shoowFPS();
-
 		glfwSwapBuffers(viewWidnow.getWindow());
 	}
 
-	glDeleteProgram(shaderProgram);
-	glDeleteVertexArrays(1, &vao);
-	glDeleteBuffers(1, &vbo);
+	mesh.clean();
 
 	glfwTerminate();
 	return 0;
