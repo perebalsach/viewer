@@ -36,7 +36,7 @@ bool ViewerWindow::Init()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 	
-	
+
 	if (m_window == NULL)
 	{
 		std::cout << "Error Creating GLFW Window" << std::endl;
@@ -54,7 +54,10 @@ bool ViewerWindow::Init()
 		glfwTerminate();
 		return false;
 	}
+
 	shoowFPS();
+
+	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 
 	return 1;
 }
