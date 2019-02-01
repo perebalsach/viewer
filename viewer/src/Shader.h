@@ -9,7 +9,7 @@ class Shader
 {
 public:
 	Shader();
-	const GLchar* loadFromFile(const GLchar* filename);
+	bool loadShaders(const char* vsFilename, const char* fsFilename);
 
 private:
 

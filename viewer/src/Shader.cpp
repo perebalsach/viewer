@@ -6,20 +6,20 @@ Shader::Shader()
 {
 }
 
-const GLchar* Shader::loadFromFile(const GLchar* filename)
+bool Shader::loadShaders(const char* vsFilename, const char* fsFilename)
 {
 	std::ifstream shaderFile;
-	const GLchar* vertexShaderSrc = "sdsdsdsd";
 
-	std::ifstream file(filename);
+	std::ifstream file(vsFilename);
 	
 	if (file.is_open()) {
 		std::string line;
 		while (std::getline(file, line)) {
 			// using printf() in all tests for consistency
-			printf("%s", line.c_str());
+			std::cout << line.c_str() << std::endl;
+			// printf("%s", line.c_str());
 		}
 		file.close();
 	}
-	return vertexShaderSrc;
+	return true;
 }

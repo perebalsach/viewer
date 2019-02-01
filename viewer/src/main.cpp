@@ -58,10 +58,7 @@ int main()
 	}
 
 	// ------------- Shader loading ------------------------------
-	// shader.loadFromFile("content/shaders/unlit.vs");
-	shader.loadFromFile("content/shaders/unlit.vs");
-	// mesh.loadShaders( ,fragmentShaderSrc);
-	// mesh.loadShaders(vertexShaderSrc, fragmentShaderSrc);
+	shader.loadShaders("content/shaders/unlit.vs", "content/shaders/unlit.fs");
 
 	// Main loop
 	while (!glfwWindowShouldClose(viewWidnow.getWindow()))
