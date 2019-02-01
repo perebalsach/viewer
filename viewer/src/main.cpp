@@ -10,29 +10,12 @@
 #include "Font.h"
 
 
-const GLchar* vertexShaderSrc =
-"#version 330 core\n"
-"layout (location = 0) in vec3 pos;"
-"void main()"
-"{"
-"	gl_Position = vec4(pos.x, pos.y, pos.z, 1.0);"
-"}";
-
-const GLchar* fragmentShaderSrc =
-"#version 330 core\n"
-"out vec4 frag_color;"
-"void main()"
-"{"
-"	frag_color = vec4(0.5f, 0.2f, 0.2f, 1.0f);"
-"}";
-
 
 int main()
 {
 	ViewerWindow viewWidnow("Viewer", 800, 600, false);
 	Font font;
 	Mesh mesh;
-	Shader shader;
 
 	// ------------- Fonts ------------------------------
 	if (!font.Load("content/fonts/pacifico.ttf"))
@@ -58,7 +41,8 @@ int main()
 	}
 
 	// ------------- Shader loading ------------------------------
-	shader.loadShaders("content/shaders/unlit.vs", "content/shaders/unlit.fs");
+	Shader shader;
+	shader.loadShaders("content/shaders/unlit.vert", "content/shaders/unlit.frag");
 
 	// Main loop
 	while (!glfwWindowShouldClose(viewWidnow.getWindow()))
@@ -66,7 +50,7 @@ int main()
 		glfwPollEvents();
 		
 		glClear(GL_COLOR_BUFFER_BIT);
-		
+		shader.use();
 		mesh.draw();
 
 		viewWidnow.shoowFPS();
