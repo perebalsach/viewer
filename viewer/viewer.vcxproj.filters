@@ -45,4 +45,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="content\shaders\unlit.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="content\shaders\unlit.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
 </Project>

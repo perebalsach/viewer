@@ -50,7 +50,19 @@ int main()
 		glfwPollEvents();
 		
 		glClear(GL_COLOR_BUFFER_BIT);
+		
 		shader.use();
+
+		GLfloat time = glfwGetTime();
+		GLfloat blueColor = (sin(time)/ 2) + 0.5;
+		glm::vec2 pos;
+		pos.x = sin(time) * 0.5;
+		pos.y = cos(time) * 0.5;
+		
+
+		shader.setUnifrom("posOffset", pos);
+		shader.setUnifrom("vertColor", glm::vec4(0.1, 0.2, blueColor, 1.0));
+
 		mesh.draw();
 
 		viewWidnow.shoowFPS();
